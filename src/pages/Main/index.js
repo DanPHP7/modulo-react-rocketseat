@@ -3,7 +3,7 @@ import { Title } from './styles';
 
 function Main() {
   return (
-    <Title>
+    <Title error={false}>
       Página Main
       <small>Menor</small>
     </Title>
