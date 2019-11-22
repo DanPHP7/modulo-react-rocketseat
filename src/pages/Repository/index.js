@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
+import { FaSpinner, FaArrowLeft } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { Loading, Owner } from './styles';
+import Container from '../../components/Container';
 import api from '../services/api';
 // import { Container } from './styles';
 
 export default class Repository extends Component {
+  static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        repository: PropTypes.string,
+      }),
+    }).isRequired,
+  };
+
   state = {
     repository: {},
     issues: [],
@@ -34,6 +46,27 @@ export default class Repository extends Component {
 
   render() {
     const { repository, issues, loading } = this.state;
-    return <h1>Repository</h1>;
+
+    if (loading) {
+      return (
+        <Loading>
+          <FaSpinner color="#FFF" size={30} />;
+        </Loading>
+      );
+    }
+
+    return (
+      <Container>
+        <Owner>
+          <Link to="/">
+            <FaArrowLeft color="#16457f" size={16} />
+            Voltar aos repositórios
+          </Link>
+          <img src={repository.owner.avatar_url} alt={repository.owner.login} />
+          <h1>{repository.name}</h1>
+          <p>{repository.description}</p>
+        </Owner>
+      </Container>
+    );
   }
 }
