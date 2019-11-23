@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
+import { FaGithubAlt, FaPlus, FaSpinner, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import Container from '../../components/Container';
-import { Form, SubmitButton, List } from './styles';
+import { Form, SubmitButton, List, Message } from './styles';
 
 class Main extends Component {
   state = {
     newRepo: '',
     repositories: [],
     loading: false,
+    error: null,
+    message: '',
   };
 
   // Carregar dados do localstorage
@@ -36,30 +38,64 @@ class Main extends Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    this.setState({ loading: true });
-    const { newRepo, repositories } = this.state;
-    const response = await api.get(`/repos/${newRepo}`);
 
-    const data = {
-      name: response.data.full_name,
-    };
+    try {
+      const { newRepo, repositories } = this.state;
+      if (newRepo === '')
+        throw new Error('Você Precisa Informar um repositório');
+
+      const isDuplicated = repositories.find(repo => repo.name === newRepo);
+
+      if (isDuplicated) throw new Error('Este repositório, já está na lista.');
+
+      this.setState({ loading: true });
+      const response = await api.get(`/repos/${newRepo}`);
+
+      const data = {
+        name: response.data.full_name,
+      };
+
+      this.setState({
+        repositories: [...repositories, data],
+        newRepo: '',
+        loading: false,
+        error: false,
+        message: '',
+      });
+    } catch (error) {
+      this.setState({
+        loading: false,
+        error: true,
+        newRepo: '',
+        message:
+          error.message === 'Request failed with status code 404'
+            ? 'Repositório não encontrado.'
+            : error.message,
+      });
+    } finally {
+      this.setState({ loading: false });
+    }
+  };
+
+  handleDelete = repository => {
+    const { repositories } = this.state;
+
+    const filter = repositories.filter(repo => repo.name !== repository);
 
     this.setState({
-      repositories: [...repositories, data],
-      newRepo: '',
-      loading: false,
+      repositories: [...filter],
     });
   };
 
   render() {
-    const { newRepo, loading, repositories } = this.state;
+    const { newRepo, loading, repositories, error, message } = this.state;
     return (
       <Container>
         <h1>
           <FaGithubAlt />
           Repositórios
         </h1>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} error={error}>
           <input
             type="text"
             placeholder="Adicionar Repositório"
@@ -74,13 +110,21 @@ class Main extends Component {
             )}
           </SubmitButton>
         </Form>
+        <Message>{message}</Message>
         <List>
           {repositories.map(repository => (
             <li key={repository.name}>
               <span>{repository.name}</span>
-              <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
-                Detalhes
-              </Link>
+              <div>
+                <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
+                  Detalhes
+                </Link>
+                <FaTrash
+                  color="#f00"
+                  size={14}
+                  onClick={() => this.handleDelete(repository.name)}
+                />
+              </div>
             </li>
           ))}
         </List>

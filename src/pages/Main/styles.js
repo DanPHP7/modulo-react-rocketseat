@@ -13,6 +13,13 @@ export const Form = styled.form`
     border-radius: 4px;
     font-size: 16px;
   }
+  ${props =>
+    props.error &&
+    css`
+      input {
+        border: 1px solid #f00 !important;
+      }
+    `}
 `;
 
 export const SubmitButton = styled.button.attrs(props => ({
@@ -61,5 +68,21 @@ export const List = styled.ul`
       color: #16457f;
       text-decoration: none;
     }
+    div {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 12%;
+    }
+    svg {
+      cursor: pointer;
+    }
   }
+`;
+export const Message = styled.span`
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  color: #f00;
 `;
