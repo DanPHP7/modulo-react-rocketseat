@@ -1,6 +1,15 @@
 import styled from 'styled-components';
 import Rotate from '../../components/Rotate';
 
+export const LoadIssue = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh;
+  svg {
+    animation: ${Rotate} 2s linear infinite;
+  }
+`;
 export const Loading = styled.div`
   display: flex;
   justify-content: center;
@@ -104,5 +113,51 @@ export const IssueList = styled.ul`
         color: #999;
       }
     }
+  }
+`;
+
+export const Pagination = styled.footer`
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  button {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    background: #16457f;
+    border: 0;
+    outline: 0;
+    padding: 8px;
+    border-radius: 4px;
+    transition: opacity 0.25s ease-out;
+    &:hover {
+      background: #656565;
+    }
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+  }
+`;
+
+export const IssueFilter = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  button {
+    color: #fff;
+    background: #656565;
+    border: 0;
+    outline: 0;
+    padding: 8px;
+    border-radius: 4px;
+    margin: 4px;
   }
 `;

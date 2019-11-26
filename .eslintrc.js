@@ -32,6 +32,7 @@ module.exports = {
     ],
     'import/prefer-default-export': 'off',
     "react/state-in-constructor": 0,
-    "react/static-property-placement": 0
+    "react/static-property-placement": 0,
+    "react/no-array-index-key": 0
   },
 };

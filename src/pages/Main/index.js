@@ -46,7 +46,7 @@ class Main extends Component {
 
       const isDuplicated = repositories.find(repo => repo.name === newRepo);
 
-      if (isDuplicated) throw new Error('Este repositório, já está na lista.');
+      if (isDuplicated) throw new Error('Este repositório já está na lista.');
 
       this.setState({ loading: true });
       const response = await api.get(`/repos/${newRepo}`);
