@@ -254,7 +254,7 @@ da `Airbnb`, essa regra consiste que em arquivos que temos somente um `export`,
 esse `export` seja um `export default`.
 
 
-## 4º Passo
+## 5º Passo
 
 Agora na raiz do seu projeto crie um arquivo chamado `.prettierrc`.
 
