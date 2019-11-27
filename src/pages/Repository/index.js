@@ -9,6 +9,7 @@ import {
   Pagination,
   IssueFilter,
   LoadIssue,
+  Label,
 } from './styles';
 import Container from '../../components/Container';
 import api from '../services/api';
@@ -78,7 +79,10 @@ export default class Repository extends Component {
       },
     });
 
-    this.setState({ issues: issues.data, loadIssue: false });
+    this.setState({
+      issues: issues.data,
+      loadIssue: false,
+    });
   };
 
   handleFilter = async indexOfFilter => {
@@ -102,6 +106,7 @@ export default class Repository extends Component {
       filters,
       page,
       loadIssue,
+      indexOfFilter,
     } = this.state;
 
     if (loading) {
@@ -125,12 +130,14 @@ export default class Repository extends Component {
         </Owner>
 
         <IssueList>
-          <IssueFilter>
+          <center>
+            <span>Issues</span>
+          </center>
+          <IssueFilter active={indexOfFilter} disabled={issues.length >= 5}>
             {filters.map((filter, index) => (
               <button
                 type="button"
-                key={index}
-                active={filter.active.toString()}
+                key={filter.label}
                 onClick={() => this.handleFilter(index)}
               >
                 {filter.label}
@@ -138,7 +145,7 @@ export default class Repository extends Component {
             ))}
           </IssueFilter>
 
-          {loadIssue ? (
+          {loadIssue && issues.length > 0 ? (
             <LoadIssue>
               <FaSpinner color="#16457f" size={30} />;
             </LoadIssue>
@@ -151,7 +158,12 @@ export default class Repository extends Component {
                     <a href={issue.html_url}>{issue.title}</a>
                     {/* LABELS */}
                     {issue.labels.map(label => (
-                      <span key={String(label.id)}>{label.name}</span>
+                      <Label
+                        background={`#${label.color}`}
+                        key={String(label.id)}
+                      >
+                        {label.name}
+                      </Label>
                     ))}
                   </strong>
                   <p>{issue.user.login}</p>
@@ -168,7 +180,12 @@ export default class Repository extends Component {
           >
             <FaArrowLeft color="#FFF" size={16} />
           </button>
-          <button type="button" onClick={() => this.handlePage('next')}>
+          <span>{page}</span>
+          <button
+            type="button"
+            disabled={!(issues.length >= 5)}
+            onClick={() => this.handlePage('next')}
+          >
             <FaArrowRight color="#FFF" size={16} />
           </button>
         </Pagination>

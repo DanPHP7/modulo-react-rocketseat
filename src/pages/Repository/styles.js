@@ -1,11 +1,13 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Rotate from '../../components/Rotate';
+
+const regx = /^#f{3}(?:f{3})?$/i;
 
 export const LoadIssue = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 10vh;
+  height: 400px;
   svg {
     animation: ${Rotate} 2s linear infinite;
   }
@@ -64,7 +66,14 @@ export const IssueList = styled.ul`
   margin-top: 30px;
   border-top: 1px solid #eee;
   list-style: none;
-
+  center {
+    margin-bottom: 15px;
+    span {
+      font-weight: bold;
+      font-size: 18px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+  }
   li {
     display: flex;
     padding: 15px 10px;
@@ -135,9 +144,7 @@ export const Pagination = styled.footer`
     padding: 8px;
     border-radius: 4px;
     transition: opacity 0.25s ease-out;
-    &:hover {
-      background: #656565;
-    }
+
     &:disabled {
       opacity: 0.35;
       cursor: not-allowed;
@@ -150,14 +157,34 @@ export const IssueFilter = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   button {
-    color: #fff;
-    background: #656565;
     border: 0;
     outline: 0;
     padding: 8px;
     border-radius: 4px;
     margin: 4px;
+    ${props =>
+      props.disabled
+        ? css`
+            &:nth-child(${props.active + 1}) {
+              color: #fff;
+              background: #16457f;
+            }
+          `
+        : css`
+            opacity: 0.7;
+            cursor: not-allowed;
+          `}
   }
+`;
+
+export const Label = styled.span`
+  color: #000 !important;
+  background: ${props => props.background} !important;
+  ${props =>
+    regx.exec(props.background) &&
+    css`
+      border: 1px solid #999;
+    `}
 `;
