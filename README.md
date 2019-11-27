@@ -8,7 +8,7 @@ a configuração do guia de Estilo de código.
 
 ## 1º Passo
 
-Vamos utilizar a `cli` do próprio _Facebook_ para configurar toda noss estrutura
+Vamos utilizar a `cli` do próprio _Facebook_ para configurar toda nossa estrutura
 inicial do nosso projeto *React*.
 
 No terminal execute:
